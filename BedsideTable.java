@@ -1,13 +1,8 @@
-import java.awt.BorderLayout;
-import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.Color;
 
 import javax.swing.JPanel;
 import javax.swing.JButton;
-import javax.swing.JTextArea;
 
 public class BedsideTable extends PanelBase {
     
@@ -23,13 +18,13 @@ public class BedsideTable extends PanelBase {
         else {
             str = str + " Currently the lamp is off.";
         }
+        if (frame.drawerCheck) {
+        	str = str + " There is nothing of interest in the drawer.";
+        }
         return str;
     }
     
-    public JPanel constructButtonPanel() {
-        JPanel buttons = new JPanel();
-        buttons.setLayout(new GridLayout(0, 3));
-        buttons.setBackground(Color.white);
+    public JPanel constructButtonPanel(JPanel buttons) {
         if (frame.bedsideLamp){
             JButton b1 = new JButton("Turn off the lamp");
             b1.setFont(font2);
@@ -56,30 +51,38 @@ public class BedsideTable extends PanelBase {
             });
             buttons.add(b1);
         }
-        JButton b2 = new JButton("Check the phone");
-        b2.setFont(font2);
-        b2.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            }
-        });
-        buttons.add(b2);
-        JButton b3 = new JButton("Open the drawer");
-        b3.setFont(font2);
-        b3.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            }
-        });
-        buttons.add(b3);
+        if(frame.yadraCard) {
+	        JButton b2 = new JButton("Call the number from the card for Yadra.");
+	        b2.setFont(font2);
+	        b2.addActionListener(new ActionListener() {
+	
+	            @Override
+	            public void actionPerformed(ActionEvent e) {
+	            	frame.changePanel(new Yadra(frame));
+	            }
+	        });
+	        buttons.add(b2);
+        }
+        if (!frame.drawerCheck) {
+	        JButton b3 = new JButton("Open the drawer");
+	        b3.setFont(font2);
+	        b3.addActionListener(new ActionListener() {
+	
+	            @Override
+	            public void actionPerformed(ActionEvent e) {
+	            	frame.drawerCheck = true;
+	            	frame.changePanel(new BedsideTable(frame));
+	            }
+	        });
+	        buttons.add(b3);
+        }
         JButton b4 = new JButton("Open the closer door");
         b4.setFont(font2);
         b4.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
+            	frame.changePanel(new ClosetDoor(frame));
             }
         });
         buttons.add(b4);
@@ -93,30 +96,33 @@ public class BedsideTable extends PanelBase {
             }
         });
         buttons.add(b5);
-        JButton b6 = new JButton("examine the dresser");
+        JButton b6 = new JButton("Search the dresser");
         b6.setFont(font2);
         b6.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
+            	frame.changePanel(new Dresser(frame));
             }
         });
         buttons.add(b6);
-        JButton b7 = new JButton("look out the window");
+        JButton b7 = new JButton("Look out the window");
         b7.setFont(font2);
         b7.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
+            	frame.changePanel(new RoomWindow(frame));
             }
         });
         buttons.add(b7);
-        JButton b8 = new JButton("look closer at the picture");
+        JButton b8 = new JButton("Examine the picture");
         b8.setFont(font2);
         b8.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
+            	frame.changePanel(new RoomPicture(frame));
             }
         });
         buttons.add(b8);
@@ -126,6 +132,7 @@ public class BedsideTable extends PanelBase {
 
             @Override
             public void actionPerformed(ActionEvent e) {
+            	frame.changePanel(new RoomSleep(frame));
             }
         });
         buttons.add(b9);
